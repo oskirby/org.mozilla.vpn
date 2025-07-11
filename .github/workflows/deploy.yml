@@ -1,0 +1,83 @@
+name: Deploy Flatpak Repository
+on:
+  workflow_run:
+    workflows: Build Flatpak Packages
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: "Deploy repository"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ostree flatpak gpg-agent
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Import signing keys
+        id: keys
+        shell: bash
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+          GNUPGHOME: ${{ runner.temp }}/gnupg-data
+        run: |
+          mkdir -m700 ${GNUPGHOME}
+          echo "allow-preset-passphrase" > $GNUPGHOME/gpg-agent.conf
+          gpgconf --kill gpg-agent
+
+          echo "$GPG_SIGNING_KEY" | gpg --import --batch
+          echo "GPG_KEYID=$(gpg --with-colons --list-keys | grep -m1 '^fpr:' | tr -d [fpr:])" >> $GITHUB_ENV
+          echo "GNUPGHOME=${GNUPGHOME}" >> $GITHUB_ENV
+
+          KEYGRIP=$(gpg --with-colons --with-keygrip --list-keys | grep -m1 '^grp:' | tr -d [grp:])
+          echo "$GPG_PASSWORD" | /lib/gnupg2/gpg-preset-passphrase --preset $KEYGRIP
+
+      - name: Checkout manifest
+        uses: actions/checkout@v4
+        with:
+          path: manifest
+
+      - name: Import repositories
+        run: |
+          mkdir -p outputs/repo
+          ostree init --mode=archive-z2 --repo=outputs/repo
+          cp -v $(find manifest -maxdepth 1 -type f) outputs/
+
+          for ARCH in x86_64 aarch64; do
+            mkdir repo-${ARCH}
+            tar xf artifacts/mozillavpn-repo-${ARCH}.tar.xz -C repo-${ARCH} --strip-components=1
+
+            for REF in $(ostree refs --repo=repo-${ARCH}); do
+                flatpak build-commit-from outputs/repo ${REF} \
+                    --gpg-sign=${GPG_KEYID} \
+                    --gpg-homedir=${GNUPGHOME} \
+                    --src-repo=repo-${ARCH} --src-ref=${REF}
+            done
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: outputs
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        id: deployment

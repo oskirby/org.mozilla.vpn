@@ -1,0 +1,79 @@
+name: Build Flatpak Packages
+on:
+  push:
+    branches:
+      - master
+      - main
+      - beta
+  pull_request:
+    branches:
+      - master
+      - main
+      - beta
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linters:
+    name: "Run linters"
+    container:
+      image: ghcr.io/flathub/flatpak-builder-lint:latest
+      options: --privileged
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Run manifest linters
+        run: flatpak-builder-lint --exceptions --user-exceptions linter-exceptions.json manifest org.mozilla.vpn.yml
+
+      - name: Run Appstream linters
+        run: flatpak-builder-lint appstream org.mozilla.vpn.metainfo.xml
+
+  build:
+    name: "Build Flatpak"
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.9
+      options: --privileged
+    strategy:
+      fail-fast: false
+      matrix:
+        variant:
+          - arch: x86_64
+            runner: ubuntu-latest
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+
+    runs-on: ${{ matrix.variant.runner }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Build
+        uses: flathub-infra/flatpak-github-actions/flatpak-builder@master
+        with:
+          bundle: mozillavpn.flatpak
+          manifest-path: org.mozilla.vpn.yml
+          arch: ${{ matrix.variant.arch }}
+          cache-key: flatpak-builder-${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.sha }}
+
+      - name: Compress repository
+        run: tar -cJf mozillavpn-repo-${{ matrix.variant.arch }}.tar.xz repo
+
+      - name: Upload repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: mozillavpn-repo-${{ matrix.variant.arch }}
+          compression-level: 0
+          path: mozillavpn-repo-${{ matrix.variant.arch }}.tar.xz
+
+      - name: Run builddir linters
+        continue-on-error: true
+        run: flatpak-builder-lint builddir flatpak_app
