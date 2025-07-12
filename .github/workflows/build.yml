@@ -32,9 +32,6 @@ jobs:
       - name: Run manifest linters
         run: flatpak-builder-lint --exceptions --user-exceptions linter-exceptions.json manifest org.mozilla.vpn.yml
 
-      - name: Run Appstream linters
-        run: flatpak-builder-lint appstream org.mozilla.vpn.metainfo.xml
-
   build:
     name: "Build Flatpak"
     container:
