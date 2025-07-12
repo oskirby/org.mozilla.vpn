@@ -67,6 +67,7 @@ jobs:
 
             for REF in $(ostree refs --repo=repo-${ARCH}); do
                 flatpak build-commit-from outputs/repo ${REF} \
+                    --update-appstream \
                     --gpg-sign=${GPG_KEYID} \
                     --gpg-homedir=${GNUPGHOME} \
                     --src-repo=repo-${ARCH} --src-ref=${REF}
