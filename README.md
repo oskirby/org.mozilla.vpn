@@ -9,4 +9,4 @@ This is the flatpak manifest for the [Mozilla VPN](https://github.com/mozilla-mo
 # Installation
 
 This repository is used to generate automated flatpak builds from the upstream
-project. These builds are installable from https://oskirby.github.io/flathub/mozillavpn-dev.flatpakrepo
+project. These builds are installable from https://oskirby.github.io/flathub/mozillavpn-dev.flatpakref

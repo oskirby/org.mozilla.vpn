@@ -58,6 +58,7 @@ jobs:
         with:
           bundle: mozillavpn.flatpak
           manifest-path: org.mozilla.vpn.yml
+          branch: ${{ github.event_name == 'push' && github.ref_name || 'master' }}
           arch: ${{ matrix.variant.arch }}
           cache-key: flatpak-builder-${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.sha }}
 

@@ -1,8 +1,12 @@
-[Flatpak Repo]
-Title=Mozilla VPN Development Builds
+[Flatpak Ref]
+Name=org.mozilla.vpn
+Title=Mozilla VPN Development Build
+Branch=main
 Url=https://oskirby.github.io/flathub/repo
+IsRuntime=false
 Homepage=https://vpn.mozilla.org
-Comment=Mozilla VPN flatpak repository for automated builds off main
+RuntimeRepo=https://dl.flathub.org/repo/flathub.flatpakrepo
 Description=Mozilla VPN flatpak repository for automated builds off main
+SuggestRemoteName=mozillavpn-dev
 Icon=https://raw.githubusercontent.com/mozilla-mobile/mozilla-vpn-client/refs/heads/main/src/ui/resources/logo-generic.svg
 GPGKey=mDMEaGwUrBYJKwYBBAHaRw8BAQdAbGNALfzwFBp7aWDJxbRAaaGYJZaM5FZOLrQrNjXukW60SU5hb21pIEtpcmJ5IChNb3ppbGxhIFRlc3RpbmcgUmVwb3NpdG9yeSBTaWduaW5nIEtleSkgPG5raXJieUBtb3ppbGxhLmNvbT6ImQQTFgoAQRYhBMgriJKZV40d73QHkyqtktZGH9PMBQJobBSsAhsDBQkFo5qABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJECqtktZGH9PMEv0A/3ZKj7G2QcvY+Yoykpvbp95a9G9dpGOhI/z67L+9W8+RAP9Lseh6Ukr249EvS0t1ZH7jP+nfmpwZUQ0hdJcb1bYoBg==
