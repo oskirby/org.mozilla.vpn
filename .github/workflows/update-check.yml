@@ -85,7 +85,7 @@ jobs:
           GIT_COMMITTER_EMAIL: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           GITHUB_TOKEN: ${{ secrets.UPDATE_TOKEN }}
         with:
-          args: --update --never-fork org.mozilla.vpn.yml
+          args: --update --never-fork org.mozilla.vpn.yml --pr-labels ${{ github.ref_name }}
 
       - name: Set automerge
         if: steps.check-updates.outputs.upstream == 'true'
