@@ -116,7 +116,7 @@ modules:
       - type: git
         url: https://github.com/mozilla-mobile/mozilla-vpn-client
         branch: releases/2.30.0
-        commit: 924e36f1c98f8c9a712a4d794598367f9bbe09cb
+        commit: 050d93590f54a8d5591c58a0eca06cd95afc39d7
 
       - type: file
         path: org.mozilla.vpn.releases.xml
