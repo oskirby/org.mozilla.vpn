@@ -17,7 +17,6 @@ jobs:
       - name: Fetch latest release candidate commit
         id: check-updates
         run: |
-          BRANCH_LINE_NUM=$(sed -n '/\s*branch:/=' org.mozilla.vpn.yml | tail -1)
           COMMIT_LINE_NUM=$(sed -n '/\s*commit:/=' org.mozilla.vpn.yml | tail -1)
           
           curl -sSL -o branches.json \
@@ -29,8 +28,6 @@ jobs:
           LATEST_NAME=$(jq -r '.[].name' branches.json | grep '^releases/' | sort -V | tail -1)
           LATEST_COMMIT=$(jq -r ".[] | select(.name == \"${LATEST_NAME}\").commit.sha" branches.json)
           LATEST_VERSION=$(echo ${LATEST_NAME} | cut -d/ -f2)
-
-          sed -i "$BRANCH_LINE_NUM s/branch:.*/branch: releases\/${LATEST_VERSION}/g" org.mozilla.vpn.yml
           sed -i "$COMMIT_LINE_NUM s/commit:.*/commit: ${LATEST_COMMIT}/g" org.mozilla.vpn.yml
 
           echo "RC_BRANCH=${LATEST_NAME}" >> $GITHUB_ENV
