@@ -115,7 +115,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/mozilla-mobile/mozilla-vpn-client
-        commit: 4c8c4f1b9a4eb1efdabe693590322b8eb0591da7
+        commit: 169579794c941c8ca7df546e9bb2e8b88ab44e70
         x-checker-data:
           type: json
           url: https://api.github.com/repos/mozilla-mobile/mozilla-vpn-client/branches/main
