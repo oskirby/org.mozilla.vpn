@@ -1,6 +1,6 @@
 app-id: org.mozilla.vpn
 runtime: org.kde.Platform
-runtime-version: '6.9'
+runtime-version: '6.10'
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
@@ -21,91 +21,17 @@ cleanup:
   - /share/man
   - /share/doc
 modules:
-  # Dependency for jsonschema and glean-parser, needs to be installed as a
-  # binary wheel because it has a bunch of complex rust dependencies that are
-  # difficult to replicate offline.
-  - name: python3-rpds
+  - name: python3-pyyaml
     buildsystem: simple
     build-commands:
       - pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}"
-        --prefix=${FLATPAK_DEST} "rpds-py" --no-build-isolation
+        --prefix=${FLATPAK_DEST} "PyYAML" --no-build-isolation
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/2e/77/87d7bfabfc4e821caa35481a2ff6ae0b73e6a391bb6b343db2c91c2b9844/rpds_py-0.26.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 82b165b07f416bdccf5c84546a484cc8f15137ca38325403864bfdf2b5b72f6a
-      - type: file
-        url: https://files.pythonhosted.org/packages/ad/91/c448ed45efdfdade82348d5e7995e15612754826ea640afc20915119734f/rpds_py-0.26.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-        sha256: 3e1157659470aa42a75448b6e943c895be8c70531c43cb78b9ba990778955582
+        url: https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz
+        sha256: d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f
     cleanup:
       - '*'
-
-  - flatpak-glean-parser.yaml
-  - shared-modules/intltool/intltool-0.51.json
-
-  - name: libndp
-    buildsystem: autotools
-    cleanup:
-      - /bin
-    sources:
-      - type: git
-        url: https://github.com/jpirko/libndp.git
-        tag: v1.9
-        commit: 2730638bf88984b09531813974f9bd14e1a50165
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+)$
-
-  - name: NetworkManager
-    buildsystem: meson
-    build-options:
-      cflags: -ltinfo
-      cxxflags: -ltinfo
-    config-opts:
-      - -Dsystemdsystemunitdir=no
-      - -Ddbus_conf_dir=/app/etc/dbus-1/system.d
-      - -Diptables=/usr/bin/true
-      - -Ddnsmasq=/usr/bin/true
-      - -Dsession_tracking=no
-      - -Dselinux=false
-      - -Dsystemd_journal=false
-      - -Dlibaudit=no
-      - -Dwext=false
-      - -Dwifi=false
-      - -Dppp=false
-      - -Dmodem_manager=false
-      - -Dovs=false
-      - -Dnmcli=false
-      - -Dnmtui=false
-      - -Dnm_cloud_setup=false
-      - -Dintrospection=true
-      - -Dvapi=false
-      - -Ddocs=false
-      - -Dtests=no
-      - -Dfirewalld_zone=false
-      - -Dlibpsl=false
-      - -Dqt=false
-      - -Dpolkit=false
-    cleanup:
-      - /sbin
-      - /etc
-      - /libexec
-      - /var
-      - /share/bash-completion
-    sources:
-      - type: git
-        url: https://gitlab.freedesktop.org/NetworkManager/NetworkManager.git
-        tag: 1.52.1
-        commit: 826e37b175368a9ce761a575adec520b83958742
-        x-checker-data:
-          type: git
-          tag-pattern: ^([\d.]+)$
-
-  - name: qt5compat
-    buildsystem: cmake-ninja
-    sources:
-      - type: git
-        tag: v6.9.0
-        url: https://github.com/qt/qt5compat
 
   - name: mozillavpn
     buildsystem: cmake-ninja
@@ -114,13 +40,9 @@ modules:
       - -DBUILD_FLATPAK=ON
     sources:
       - type: git
-        url: https://github.com/mozilla-mobile/mozilla-vpn-client
-        commit: 603f8ffb25147ab5d8262dbd394b07ca0ffc3448
-
-      - type: file
-        path: org.mozilla.vpn.releases.xml
-        dest: linux/extra
-        dest-filename: org.mozilla.vpn.releases.xml.in
+        url: https://github.com/mozilla-mobile/mozilla-vpn-client.git
+        branch: flathub-rc-workflow
+        commit: a60896f703fae0a597efe993f9c9da6f59abcf2c
 
       # Install vendored Rust crates
       - flatpak-vpn-crates.json
@@ -128,4 +50,3 @@ modules:
         commands:
           - mkdir .cargo
           - cp cargo/config .cargo/config.toml
-

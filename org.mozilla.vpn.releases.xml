@@ -1,4 +1,43 @@
 <releases>
+  <release version="2.40.0" date="2026-10-19">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.40.0</url>
+  </release>
+  <release version="2.39.0" date="2026-07-22">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.39.0</url>
+  </release>
+  <release version="2.38.0" date="2026-06-17">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.38.0</url>
+  </release>
+  <release version="2.37.0" date="2026-05-22">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.37.0</url>
+  </release>
+  <release version="2.36.0" date="2026-04-22">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.36.0</url>
+  </release>
+  <release version="2.35.0" date="2026-03-25">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.35.0</url>
+  </release>
+  <release version="2.34.0" date="2026-03-10">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.34.0</url>
+  </release>
+  <release version="2.33.1" date="2026-02-18">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.33.1</url>
+  </release>
+  <release version="2.33.0" date="2026-02-05">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.33.0</url>
+  </release>
+  <release version="2.32.0" date="2025-10-22">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.32.0</url>
+  </release>
+  <release version="2.31.1" date="2025-09-23">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.31.1</url>
+  </release>
+  <release version="2.31.0" date="2025-09-22">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.31.0</url>
+  </release>
+  <release version="2.30.0" date="2025-07-22">
+    <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.30.0</url>
+  </release>
   <release version="2.29.0" date="2025-06-18">
     <url type="details">https://github.com/mozilla-mobile/mozilla-vpn-client/releases/v2.29.0</url>
   </release>
