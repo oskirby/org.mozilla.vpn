@@ -33,14 +33,6 @@ modules:
     cleanup:
       - '*'
 
-  - name: qt5compat
-    buildsystem: cmake-ninja
-    sources:
-      - type: git
-        tag: v6.10.1
-        commit: dbc825317c030701bc454bcb5c332aa13dcdaf94
-        url: https://github.com/qt/qt5compat
-
   - name: mozillavpn
     buildsystem: cmake-ninja
     config-opts:
@@ -48,18 +40,14 @@ modules:
       - -DBUILD_FLATPAK=ON
     sources:
       - type: git
-        url: https://github.com/mozilla-mobile/mozilla-vpn-client
-        tag: v2.40.0-rc8
-        commit: eb5e9943d2ef4e465040c27a995da3c822c65a32
-        x-checker-data:
-          type: git
-          tag-pattern: ^v([\d.]+-rc\d+)$
-          is-main-source: true
+        url: https://github.com/mozilla-mobile/mozilla-vpn-client.git
+        tag: v2.41.0-rc2
+        commit: 190cfa82f0054e61233eb66ed1d0eb2579d6f314
 
       - type: file
-        path: org.mozilla.vpn.releases.xml
+        path: org.mozilla.vpn.release.xml
         dest: linux/extra
-        dest-filename: org.mozilla.vpn.releases.xml.in
+        dest-filename: org.mozilla.vpn.release.xml.in
 
       # Install vendored Rust crates
       - flatpak-vpn-crates.json
@@ -67,4 +55,3 @@ modules:
         commands:
           - mkdir .cargo
           - cp cargo/config .cargo/config.toml
-
